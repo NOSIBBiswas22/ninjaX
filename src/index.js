@@ -16,6 +16,8 @@ const { setupLogger } = require('./utils/logger');
 const { loadConfig } = require('./config/config-loader');
 const { setupStaticServer } = require('./server/static-server');
 const { setupReverseProxy } = require('./server/reverse-proxy');
+const { setupApiServer } = require('./server/api-server');
+const { setupConfigWatcher } = require('./utils/file-watcher');
 
 // Initialize logger
 const logger = setupLogger();
@@ -33,6 +35,7 @@ class NinjaX {
     this.proxy = httpProxy.createProxyServer({});
     this.config = null;
     this.port = process.env.PORT || DEFAULT_PORT;
+    this.serverState = {}; // Store server state for monitoring and real-time data
   }
 
   /**
@@ -84,8 +87,13 @@ class NinjaX {
     // Setup static file serving
     setupStaticServer(this.app, this.config);
 
-    // Setup reverse proxy if configured
+    // Setup reverse proxy if configured and store server state
+    const reverseProxyModule = require('./server/reverse-proxy');
+    this.serverState = reverseProxyModule.serverState || {};
     setupReverseProxy(this.app, this.proxy, this.config);
+    
+    // Setup API server for real-time data
+    setupApiServer(this.app, this.config, this.serverState);
 
     // Default route - serve the NinjaX welcome page
     this.app.get('/', (req, res) => {
@@ -134,6 +142,13 @@ class NinjaX {
     this.server.listen(this.port, () => {
       logger.info(`NinjaX server running on port ${this.port}`);
       logger.info(`Visit http://localhost:${this.port} to see the welcome page`);
+      
+      // Setup config file watcher
+      const configPath = path.join(__dirname, '../config/ninjax.yaml');
+      setupConfigWatcher(configPath, () => {
+        logger.info('Configuration file changed, restarting server...');
+        process.exit(0); // Exit with success code for nodemon to restart
+      }, logger);
     });
   }
 }

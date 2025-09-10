@@ -1,17 +1,17 @@
 # NinjaX API Reference
 
-This document provides a comprehensive reference for NinjaX's API endpoints and programmatic interfaces.
+This document provides a comprehensive reference for NinjaX's API endpoints and programmatic interfaces, including real-time data and load balancing statistics.
 
-## Status Endpoints
+## Real-Time Data API Endpoints
 
-### GET /status
+### GET /api/v1/stats/server
 
-Returns the current status of the NinjaX server.
+Returns the current server statistics including CPU usage, memory usage, and uptime.
 
 **Request:**
 
 ```
-GET /status
+GET /api/v1/stats/server
 ```
 
 **Response:**
@@ -19,15 +19,142 @@ GET /status
 ```json
 {
   "status": "running",
-  "uptime": "0 days, 0 hours, 5 minutes, 30 seconds",
-  "version": "1.0.0",
-  "memory": {
-    "rss": "35MB",
-    "heapTotal": "20MB",
-    "heapUsed": "15MB",
-    "external": "2MB"
+  "uptime": 300,
+  "version": "3.0.0",
+  "memory": 45.2,
+  "cpu": 2.5,
+  "platform": "linux x64",
+  "hostname": "ninjax-server"
+}
+```
+
+**Status Codes:**
+
+- `200 OK`: Server is running normally
+
+### GET /api/v1/stats/proxy
+
+Returns statistics about the reverse proxy and load balancer.
+
+**Request:**
+
+```
+GET /api/v1/stats/proxy
+```
+
+**Response:**
+
+```json
+{
+  "activeConnections": 42,
+  "totalRequests": 12345,
+  "healthyTargets": 3,
+  "totalTargets": 4,
+  "algorithm": "round_robin",
+  "targets": [
+    {
+      "url": "http://server1:3000",
+      "healthy": true,
+      "connections": 12,
+      "lastChecked": "2023-06-15T10:30:45Z"
+    },
+    {
+      "url": "http://server2:3000",
+      "healthy": true,
+      "connections": 15,
+      "lastChecked": "2023-06-15T10:30:45Z"
+    },
+    {
+      "url": "http://server3:3000",
+      "healthy": true,
+      "connections": 15,
+      "lastChecked": "2023-06-15T10:30:45Z"
+    },
+    {
+      "url": "http://server4:3000",
+      "healthy": false,
+      "connections": 0,
+      "lastChecked": "2023-06-15T10:30:45Z"
+    }
+  ]
+}
+```
+
+**Status Codes:**
+
+- `200 OK`: Server is running normally
+
+### GET /api/v1/config
+
+Returns the current server configuration.
+
+**Request:**
+
+```
+GET /api/v1/config
+```
+
+**Response:**
+
+```json
+{
+  "server": {
+    "port": 8080,
+    "host": "0.0.0.0",
+    "workers": 4
   },
-  "cpu": "2.5%"
+  "proxy": {
+    "enabled": true,
+    "ws": true,
+    "locations": [
+      {
+        "path": "/api",
+        "loadBalancing": {
+          "algorithm": "round_robin",
+          "targets": [
+            "http://server1:3000",
+            "http://server2:3000",
+            "http://server3:3000"
+          ],
+          "healthCheck": {
+            "path": "/health",
+            "interval": 5000
+          }
+        }
+      }
+    ]
+  }
+}
+```
+
+**Status Codes:**
+
+- `200 OK`: Server is running normally
+
+### GET /api/v1/sample
+
+Returns sample data for testing purposes.
+
+**Request:**
+
+```
+GET /api/v1/sample
+```
+
+**Response:**
+
+```json
+{
+  "users": [
+    { "id": 1, "name": "Alice" },
+    { "id": 2, "name": "Bob" },
+    { "id": 3, "name": "Charlie" }
+  ],
+  "products": [
+    { "id": 101, "name": "Widget A", "price": 19.99 },
+    { "id": 102, "name": "Widget B", "price": 29.99 },
+    { "id": 103, "name": "Widget C", "price": 39.99 }
+  ]
 }
 ```
 
@@ -56,7 +183,18 @@ const server = new NinjaX({
     locations: [
       {
         path: '/api',
-        target: 'http://localhost:8000',
+        loadBalancing: {
+          algorithm: 'round_robin',
+          targets: [
+            'http://localhost:8000',
+            'http://localhost:8001',
+            'http://localhost:8002'
+          ],
+          healthCheck: {
+            path: '/health',
+            interval: 5000
+          }
+        },
         options: {
           changeOrigin: true
         }

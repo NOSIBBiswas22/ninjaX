@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NinjaX - Enterprise Cloud Platform</title>
+    <link rel="stylesheet" href="/css/style.css">
     <style>
         * {
             margin: 0;
@@ -392,11 +393,11 @@
     <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <h1>Enterprise Cloud Platform</h1>
-            <p class="hero-subtitle">Scalable infrastructure solutions for modern applications. Deploy, monitor, and scale with confidence.</p>
+            <h1>NinjaX</h1>
+            <p class="hero-subtitle">A powerful web server and reverse proxy with load balancing</p>
             <div class="cta-buttons">
-                <a href="#" class="btn btn-primary">Start Free Trial</a>
-                <a href="#" class="btn btn-secondary">View Documentation</a>
+                <a href="#dashboard" class="btn btn-primary">View Dashboard</a>
+                <a href="#config" class="btn btn-secondary">Server Config</a>
             </div>
         </div>
     </section>
@@ -547,6 +548,67 @@
                 }
             });
         });
+
+        // Server dashboard data
+        function updateServerStats() {
+            document.getElementById('cpu-usage').textContent = Math.floor(Math.random() * 30) + '%';
+            document.getElementById('memory-usage').textContent = Math.floor(Math.random() * 40 + 30) + '%';
+            document.getElementById('uptime').textContent = Math.floor(Math.random() * 100 + 200) + ' days';
+            document.getElementById('platform').textContent = 'Linux x64';
+            
+            document.getElementById('active-connections').textContent = Math.floor(Math.random() * 1000 + 500);
+            document.getElementById('total-requests').textContent = Math.floor(Math.random() * 10000000 + 5000000);
+            document.getElementById('healthy-targets').textContent = Math.floor(Math.random() * 5 + 15) + '/20';
+            document.getElementById('current-algorithm').textContent = 'Round Robin';
+        }
+        
+        // Configuration data
+        function loadConfigData() {
+            const configData = `{
+  "server": {
+    "port": 8080,
+    "workers": 8,
+    "timeout": 30,
+    "keepalive": true
+  },
+  "proxy": {
+    "algorithm": "round-robin",
+    "targets": [
+      "http://backend1:3000",
+      "http://backend2:3000",
+      "http://backend3:3000"
+    ],
+    "healthCheck": {
+      "path": "/health",
+      "interval": 5000
+    }
+  }
+}`;
+            document.getElementById('config-display').innerHTML = `<pre>${configData}</pre>`;
+            document.getElementById('sample-display').innerHTML = `<pre>GET /api/users HTTP/1.1
+Host: api.example.com
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Accept: application/json
+
+HTTP/1.1 200 OK
+Content-Type: application/json
+Content-Length: 120
+
+{
+  "users": [
+    { "id": 1, "name": "Alice" },
+    { "id": 2, "name": "Bob" }
+  ]
+}</pre>`;
+        }
+        
+        // Initialize dashboard data
+        if (document.getElementById('cpu-usage')) {
+            updateServerStats();
+            setInterval(updateServerStats, 5000);
+            loadConfigData();
+        }
     </script>
+    
 </body>
 </html>

@@ -1,6 +1,6 @@
 # Reverse Proxy in NinjaX
 
-This guide explains how to configure and use the reverse proxy functionality in NinjaX to route requests to backend services.
+This guide explains how to configure and use the reverse proxy functionality in NinjaX to route requests to backend services, including load balancing capabilities.
 
 ## Overview
 
@@ -9,7 +9,8 @@ NinjaX includes a powerful reverse proxy feature that allows you to route reques
 - Creating a unified API gateway for microservices
 - Implementing backend-for-frontend (BFF) patterns
 - Avoiding cross-origin resource sharing (CORS) issues
-- Load balancing between multiple backend instances
+- Load balancing between multiple backend instances with advanced algorithms
+- Health checking of backend services for high availability
 
 The reverse proxy functionality is built on top of the [http-proxy](https://github.com/http-party/node-http-proxy) library.
 
@@ -94,6 +95,54 @@ pathRewrite:
 ```
 
 The rules are applied in order, and only the first matching rule is applied.
+
+## Load Balancing
+
+NinjaX provides advanced load balancing capabilities to distribute traffic across multiple backend servers. This improves application availability, scalability, and reliability.
+
+### Load Balancing Algorithms
+
+NinjaX supports the following load balancing algorithms:
+
+- **round_robin**: Distributes requests sequentially across the server pool
+- **least_connections**: Routes requests to the server with the fewest active connections
+- **ip_hash**: Uses client IP address to determine which server receives the request (session persistence)
+- **random**: Randomly selects a server for each request
+
+### Configuration
+
+Load balancing is configured in the `proxy` section of the `config/ninjax.yaml` file:
+
+```yaml
+proxy:
+  enabled: true
+  locations:
+    - path: /api
+      loadBalancing:
+        algorithm: round_robin  # Load balancing algorithm
+        targets:                # List of backend servers
+          - http://server1:3000
+          - http://server2:3000
+          - http://server3:3000
+        healthCheck:            # Health check configuration
+          path: /health         # Health check endpoint
+          interval: 5000        # Check interval in milliseconds
+          timeout: 2000         # Timeout in milliseconds
+          unhealthyThreshold: 2 # Number of failures before marking as unhealthy
+          healthyThreshold: 1   # Number of successes before marking as healthy
+```
+
+### Health Checking
+
+NinjaX automatically performs health checks on backend servers to ensure that traffic is only routed to healthy instances. If a server fails a health check, it will be temporarily removed from the server pool until it becomes healthy again.
+
+Health check configuration options:
+
+- **path**: The endpoint to check on the backend server
+- **interval**: How frequently to perform health checks (in milliseconds)
+- **timeout**: How long to wait for a response before considering the check failed (in milliseconds)
+- **unhealthyThreshold**: Number of consecutive failed checks before marking a server as unhealthy
+- **healthyThreshold**: Number of consecutive successful checks before marking a server as healthy
 
 ## WebSocket Support
 

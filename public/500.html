@@ -4,45 +4,420 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>500 - Server Error | NinjaX</title>
-  <link rel="stylesheet" href="/css/style.css">
   <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: #0a0a0a;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1.6;
+    }
+
+    /* Header */
+    .header {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      padding: 1rem 2rem;
+      backdrop-filter: blur(20px);
+      background: rgba(10, 10, 10, 0.8);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #999;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+    }
+
+    /* Error Container */
     .error-container {
       text-align: center;
-      padding: 3rem 1rem;
+      max-width: 600px;
+      padding: 2rem;
+      background: linear-gradient(135deg, #1a1a1a 0%, #161616 100%);
+      border-radius: 16px;
+      border: 1px solid #222;
+      position: relative;
+      overflow: hidden;
     }
+
+    .error-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, #ff4444, transparent);
+    }
+
     .error-code {
       font-size: 8rem;
-      font-weight: bold;
-      color: var(--error-color);
+      font-weight: 800;
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       margin-bottom: 1rem;
+      font-family: 'SF Mono', Monaco, monospace;
+      line-height: 1;
     }
+
     .error-message {
       font-size: 2rem;
-      margin-bottom: 2rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #ffffff;
     }
-    .back-button {
-      display: inline-block;
-      padding: 0.75rem 1.5rem;
-      background-color: var(--accent-color);
-      color: white;
+
+    .error-description {
+      font-size: 1.1rem;
+      color: #999;
+      margin-bottom: 2.5rem;
+      line-height: 1.6;
+    }
+
+    .error-actions {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 0.875rem 2rem;
+      border-radius: 8px;
       text-decoration: none;
-      border-radius: 4px;
-      font-weight: bold;
-      transition: background-color 0.3s ease;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 0.95rem;
     }
-    .back-button:hover {
-      background-color: #2980b9;
+
+    .btn-primary {
+      background: #ffffff;
+      color: #0a0a0a;
+    }
+
+    .btn-primary:hover {
+      background: #f0f0f0;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #ffffff;
+      border: 1px solid #333;
+    }
+
+    .btn-secondary:hover {
+      border-color: #555;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+      color: #ffffff;
+      border: none;
+    }
+
+    .btn-danger:hover {
+      background: linear-gradient(135deg, #ff5252 0%, #e55100 100%);
+      transform: translateY(-2px);
+    }
+
+    /* Error details */
+    .error-details {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid #222;
+      text-align: left;
+    }
+
+    .error-details h3 {
+      font-size: 1.1rem;
+      margin-bottom: 1rem;
+      color: #ffffff;
+      text-align: center;
+    }
+
+    .error-info {
+      background: #0f0f0f;
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid #1f1f1f;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 0.85rem;
+      color: #999;
+    }
+
+    .error-info-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #1a1a1a;
+    }
+
+    .error-info-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .error-info-label {
+      color: #666;
+    }
+
+    .error-info-value {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    /* Floating elements for visual interest */
+    .floating-shape {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: rgba(255, 107, 107, 0.03);
+      border-radius: 50%;
+      animation: float 15s infinite ease-in-out;
+      pointer-events: none;
+    }
+
+    .shape-1 {
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .shape-2 {
+      bottom: 10%;
+      right: 10%;
+      animation-delay: -5s;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.3; }
+      50% { transform: translateY(-20px) rotate(180deg); opacity: 0.1; }
+    }
+
+    /* Status indicator - showing issues */
+    .status-bar {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #2a1a1a;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      border: 1px solid #442;
+      font-size: 0.8rem;
+      color: #ff9999;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ff6b6b;
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .retry-info {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: rgba(255, 107, 107, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(255, 107, 107, 0.2);
+      font-size: 0.9rem;
+      color: #ffcccc;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .error-container {
+        margin: 1rem;
+        padding: 1.5rem;
+      }
+
+      .error-code {
+        font-size: 6rem;
+      }
+
+      .error-message {
+        font-size: 1.5rem;
+      }
+
+      .error-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .error-info-item {
+        flex-direction: column;
+        gap: 0.25rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="error-container">
-      <div class="error-code">500</div>
-      <div class="error-message">Server Error</div>
-      <p>Something went wrong on our end. Please try again later or contact the administrator if the problem persists.</p>
-      <a href="/" class="back-button">Back to Home</a>
+  <!-- Background elements -->
+  <div class="floating-shape shape-1"></div>
+  <div class="floating-shape shape-2"></div>
+
+  <!-- Error Container -->
+  <div class="error-container">
+    <div class="error-code">500</div>
+    <div class="error-message">Internal Server Error</div>
+    <p class="error-description">
+      We're experiencing some technical difficulties on our end. 
+      Our team has been notified and is working to resolve this issue.
+    </p>
+    
+    <div class="error-actions">
+      <button onclick="window.location.reload()" class="btn btn-danger">Try Again</button>
+      <a href="/" class="btn btn-primary">Back to Home</a>
+      <a href="/support" class="btn btn-secondary">Contact Support</a>
+    </div>
+
+    <div class="retry-info">
+      <strong>What you can do:</strong><br>
+      • Refresh the page in a few minutes<br>
+      • Check our status page for ongoing issues<br>
+      • Contact support if the problem persists
+    </div>
+
+    <div class="error-details">
+      <h3>Technical Details</h3>
+      <div class="error-info">
+        <div class="error-info-item">
+          <span class="error-info-label">Error ID:</span>
+          <span class="error-info-value" id="error-id">--</span>
+        </div>
+        <div class="error-info-item">
+          <span class="error-info-label">Timestamp:</span>
+          <span class="error-info-value" id="timestamp">--</span>
+        </div>
+        <div class="error-info-item">
+          <span class="error-info-label">Server:</span>
+          <span class="error-info-value">NinjaX-web-01</span>
+        </div>
+        <div class="error-info-item">
+          <span class="error-info-label">Response Code:</span>
+          <span class="error-info-value">HTTP 500</span>
+        </div>
+      </div>
     </div>
   </div>
+
+  <!-- Status Bar -->
+  <div class="status-bar">
+    <span class="status-dot"></span>
+    Service degraded - investigating
+  </div>
+
+  <script>
+    // Generate error ID and timestamp
+    function generateErrorId() {
+      return 'ERR-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+    }
+
+    function updateTimestamp() {
+      const now = new Date();
+      return now.toISOString();
+    }
+
+    // Initialize error details
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('error-id').textContent = generateErrorId();
+      document.getElementById('timestamp').textContent = updateTimestamp();
+
+      // Add some interactivity
+      document.querySelectorAll('a[href^="/"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          this.style.transform = 'scale(0.98)';
+          setTimeout(() => {
+            this.style.transform = 'scale(1)';
+          }, 100);
+        });
+      });
+
+      // Add parallax effect to floating shapes
+      document.addEventListener('mousemove', function(e) {
+        const shapes = document.querySelectorAll('.floating-shape');
+        const mouseX = e.clientX / window.innerWidth;
+        const mouseY = e.clientY / window.innerHeight;
+        
+        shapes.forEach((shape, index) => {
+          const speed = (index + 1) * 0.5;
+          const x = (mouseX - 0.5) * speed * 20;
+          const y = (mouseY - 0.5) * speed * 20;
+          shape.style.transform = `translate(${x}px, ${y}px)`;
+        });
+      });
+
+      // Auto-retry functionality
+      let retryCount = 0;
+      const maxRetries = 3;
+      
+      window.autoRetry = function() {
+        if (retryCount < maxRetries) {
+          retryCount++;
+          setTimeout(() => {
+            window.location.reload();
+          }, 5000 * retryCount); // Exponential backoff
+        }
+      };
+    });
+  </script>
 </body>
 </html>
