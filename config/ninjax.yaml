@@ -1,0 +1,42 @@
+# NinjaX Server Configuration
+
+# Server settings
+server:
+  port: 8080
+  host: 0.0.0.0
+  workers: 1
+  auto_restart: true  # Enable auto-restart on configuration changes
+
+# Logging configuration
+logging:
+  level: info
+  access_log: logs/access.log
+  error_log: logs/error.log
+
+# HTTP server settings
+http:
+  static:
+    enabled: true
+    root: ./public
+    options:
+      index:
+        - index.html
+        - index.htm
+      extensions:
+        - html
+        - htm
+      fallthrough: true
+
+# Reverse proxy settings
+proxy:
+  enabled: false
+  ws: false  # WebSocket support
+  locations:
+    # Example proxy configuration
+    - path: /api
+      target: https://jsonplaceholder.typicode.com/
+      options:
+        changeOrigin: true
+        pathRewrite:
+          '^/api': ''
+        ws: false

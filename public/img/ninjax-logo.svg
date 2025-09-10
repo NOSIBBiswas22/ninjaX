@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <style>
+    .ninja-mask { fill: #2c3e50; }
+    .ninja-eyes { fill: #e74c3c; }
+    .ninja-x { fill: #3498db; }
+  </style>
+  <circle cx="50" cy="50" r="45" fill="#f5f7fa" stroke="#2c3e50" stroke-width="2" />
+  <path class="ninja-mask" d="M25,40 C25,30 35,20 50,20 C65,20 75,30 75,40 C75,55 65,65 50,65 C35,65 25,55 25,40 Z" />
+  <circle class="ninja-eyes" cx="40" cy="40" r="5" />
+  <circle class="ninja-eyes" cx="60" cy="40" r="5" />
+  <path class="ninja-x" d="M30,70 L40,80 L35,85 L25,75 Z M70,70 L60,80 L65,85 L75,75 Z" />
+</svg>

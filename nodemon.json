@@ -1,0 +1,15 @@
+{
+  "watch": [
+    "src/**/*.js",
+    "config/**/*.yaml"
+  ],
+  "ignore": [
+    "node_modules",
+    "logs",
+    "public"
+  ],
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "ext": "js,yaml"
+}

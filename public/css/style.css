@@ -1,0 +1,158 @@
+:root {
+  --primary-color: #2c3e50;
+  --secondary-color: #e74c3c;
+  --accent-color: #3498db;
+  --background-color: #f5f7fa;
+  --text-color: #333;
+  --success-color: #2ecc71;
+  --warning-color: #f39c12;
+  --error-color: #e74c3c;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.logo img {
+  height: 60px;
+  margin-right: 1rem;
+}
+
+.logo h1 {
+  font-size: 3rem;
+  color: var(--primary-color);
+  font-weight: 700;
+}
+
+.tagline {
+  font-size: 1.2rem;
+  color: var(--secondary-color);
+  font-style: italic;
+}
+
+section {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+h2 {
+  color: var(--primary-color);
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--accent-color);
+  padding-bottom: 0.5rem;
+}
+
+.info-grid, .feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.info-item, .feature-card {
+  padding: 1rem;
+  border-radius: 6px;
+  background-color: #f8f9fa;
+}
+
+.info-item h3, .feature-card h3 {
+  color: var(--accent-color);
+  margin-bottom: 0.5rem;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-weight: bold;
+  color: white;
+}
+
+.status-badge.success {
+  background-color: var(--success-color);
+}
+
+.status-badge.warning {
+  background-color: var(--warning-color);
+}
+
+.status-badge.error {
+  background-color: var(--error-color);
+}
+
+.feature-card {
+  text-align: center;
+  transition: transform 0.3s ease;
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.code-block {
+  background-color: #2c3e50;
+  border-radius: 6px;
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+
+code, pre {
+  font-family: 'Courier New', Courier, monospace;
+  color: #f8f9fa;
+}
+
+footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+  color: #666;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  .info-grid, .feature-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .logo h1 {
+    font-size: 2.5rem;
+  }
+}

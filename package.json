@@ -1,0 +1,28 @@
+{
+  "name": "ninjax",
+  "version": "1.0.0",
+  "description": "NinjaX - A powerful web server and reverse proxy (Nginx clone)",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "web-server",
+    "reverse-proxy",
+    "http-server",
+    "nginx-clone"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "http-proxy": "^1.18.1",
+    "winston": "^3.10.0",
+    "yaml": "^2.3.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
