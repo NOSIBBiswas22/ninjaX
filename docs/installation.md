@@ -22,7 +22,7 @@ npm --version
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ninjax.git
+git clone https://github.com/NOSIBBiswas22/ninjax.git
 
 # Navigate to the project directory
 cd ninjax
@@ -33,7 +33,7 @@ npm install
 
 ### Method 2: Download Release Package
 
-1. Download the latest release package from the [Releases](https://github.com/yourusername/ninjax/releases) page.
+1. Download the latest release package from the [Releases](https://github.com/NOSIBBiswas22/ninjax/releases) page.
 2. Extract the package to your desired location.
 3. Navigate to the extracted directory.
 4. Install dependencies:

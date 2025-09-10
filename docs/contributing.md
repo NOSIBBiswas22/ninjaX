@@ -49,7 +49,7 @@ Enhancement suggestions are also tracked as GitHub issues. When creating an enha
 
 ```bash
 # Clone your fork of the repository
-git clone https://github.com/yourusername/ninjax.git
+git clone https://github.com/NOSIBBiswas22/ninjax.git
 
 # Navigate to the project directory
 cd ninjax

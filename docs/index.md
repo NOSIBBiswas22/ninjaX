@@ -24,7 +24,7 @@ Welcome to the NinjaX documentation. This guide provides comprehensive informati
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ninjax.git
+git clone https://github.com/NOSIBBiswas22/ninjax.git
 
 # Navigate to the project directory
 cd ninjax

@@ -6,7 +6,10 @@ NinjaX is a powerful web server and reverse proxy, inspired by Nginx. It provide
 
 - **Web Server**: Serve static files with high performance
 - **Reverse Proxy**: Route requests to multiple backend services
+- **Load Balancing**: Distribute traffic across multiple backend servers
+- **Real-time Data**: Support for real-time data services
 - **Configuration**: Simple YAML-based configuration
+- **Auto-restart**: Automatic server restart on configuration changes
 - **Logging**: Comprehensive logging system
 - **Default Landing Page**: Beautiful welcome page included
 
@@ -14,7 +17,7 @@ NinjaX is a powerful web server and reverse proxy, inspired by Nginx. It provide
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ninjax.git
+git clone https://github.com/NOSIBBiswas22/ninjax.git
 
 # Navigate to the project directory
 cd ninjax
@@ -106,6 +109,50 @@ proxy:
         changeOrigin: true
 ```
 
+## Load Balancing
+
+NinjaX supports load balancing to distribute traffic across multiple backend servers. This improves performance and provides failover capabilities.
+
+Example configuration:
+
+```yaml
+proxy:
+  enabled: true
+  locations:
+    - path: /api
+      targets:
+        - http://server1:3000
+        - http://server2:3000
+        - http://server3:3000
+      options:
+        changeOrigin: true
+        loadBalancing:
+          method: round-robin  # Options: round-robin, least-connections, ip-hash
+```
+
+## Real-time Data Services
+
+NinjaX includes support for real-time data services, allowing you to build applications that require live updates and data streaming.
+
+Example usage:
+
+```javascript
+// Client-side code
+const dataService = new NinjaXDataService('/data');
+
+dataService.subscribe('metrics', (data) => {
+  console.log('Received real-time metrics:', data);
+});
+
+// Server-side configuration
+// In your ninjax.yaml file:
+data:
+  enabled: true
+  endpoints:
+    - path: /data
+      source: ./data-services/metrics.js
+```
+
 ## Project Structure
 
 ```
@@ -121,12 +168,39 @@ proxy:
 ├── src/                # Source code
 │   ├── config/         # Configuration handling
 │   ├── server/         # Server implementation
+│   │   ├── http/       # HTTP server implementation
+│   │   └── proxy/      # Reverse proxy implementation
+│   ├── services/       # Service implementations
+│   │   ├── data/       # Real-time data services
+│   │   └── load-balancer/ # Load balancing implementation
 │   ├── utils/          # Utility functions
+│   │   └── file-watcher.js # Configuration file watcher
 │   └── index.js        # Entry point
+├── data-services/      # Data service implementations
 ├── package.json        # Project metadata and dependencies
 └── README.md          # Project documentation
 ```
 
 ## License
 
-MIT
+MIT License
+
+Copyright (c) 2023 NOSIBBiswas22
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

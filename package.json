@@ -14,7 +14,7 @@
     "http-server",
     "nginx-clone"
   ],
-  "author": "",
+  "author": "Nosib Biswas",
   "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
